@@ -1,0 +1,25 @@
+{
+  "name": "news-explorer-api",
+  "version": "1.0.0",
+  "description": "practicum final project backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yotam7298/news-explorer-api.git"
+  },
+  "author": "Yotam Yakov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yotam7298/news-explorer-api/issues"
+  },
+  "homepage": "https://github.com/Yotam7298/news-explorer-api#readme",
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "nodemon": "^2.0.20"
+  }
+}
