@@ -38,5 +38,5 @@ module.exports = {
   NoAuthorizationError,
   UnauthorizedError,
   NotFoundError,
-  ConflictError
+  ConflictError,
 };

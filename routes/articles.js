@@ -2,11 +2,11 @@ const router = require('express').Router();
 const {
   getArticles,
   addArticle,
-  deleteArticle
+  deleteArticle,
 } = require('../controllers/articles');
 const {
   validateAddArticle,
-  validateDeleteArticle
+  validateDeleteArticle,
 } = require('../middleware/requestValidation');
 
 router.get('/', getArticles);

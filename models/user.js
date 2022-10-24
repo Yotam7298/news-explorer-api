@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
     unique: true,
     validate: {
       validator: (v) => validator.isEmail(v),
-      message: "Please provide an Email"
+      message: 'Please provide an Email',
     },
   },
   password: {
@@ -25,4 +25,4 @@ const userSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model('user', userSchema);

@@ -15,7 +15,7 @@ const indexRouter = require('./routes/index');
 
 const app = express();
 const { PORT = 3000 } = process.env;
-const mongoLink = "mongodb://localhost:27017/newsexplorer";
+const mongoLink = 'mongodb://localhost:27017/newsexplorer';
 const limiter = rateLimit({
   windowMs: 15 * 6000,
   max: 100,
@@ -24,7 +24,7 @@ const limiter = rateLimit({
 });
 
 mongoose.connect(mongoLink);
-require("dotenv").config();
+require('dotenv').config();
 
 app.use(helmet());
 app.use(limiter);
@@ -37,8 +37,9 @@ app.use('/', indexRouter);
 app.use('*', pathNonExistent);
 app.use(errorLogger);
 app.use(errors());
-app.use(errorHandler)
+app.use(errorHandler);
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server is running at port ${PORT}`);
 });
