@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { NoAuthorizationError, ConflictError } = require('../errors/errors');
+const { NoAuthorizationError, NotFoundError, ConflictError } = require('../errors/errors');
 
 module.exports.signUp = (req, res, next) => {
   const { email, password, name } = req.body;
@@ -17,7 +17,7 @@ module.exports.signUp = (req, res, next) => {
       User.create({ email, password: hash, name })
     )
     .then(({ email, name }) => {
-      res.send({ email, name });
+      res.status(201).send({ email, name });
     })
     .catch(next);
 };
@@ -47,6 +47,17 @@ module.exports.signIn = (req, res, next) => {
           res.send({ token });
         })
         .catch(next);
+    })
+    .catch(next);
+}
+
+module.exports.getMe = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if(!user) {
+        return Promise.reject(new NotFoundError('Requested user could not be found'))
+      }
+      res.send(user);
     })
     .catch(next);
 }
