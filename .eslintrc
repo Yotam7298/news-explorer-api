@@ -8,6 +8,6 @@
       "if": { "after": false }
     }}],
     "consistent-return": "off",
-    "max-classes-per-file": ["error", 5],
+    "max-classes-per-file": ["error", 5]
   }
 }

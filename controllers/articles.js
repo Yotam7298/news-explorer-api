@@ -46,7 +46,7 @@ module.exports.deleteArticle = (req, res, next) => {
         return Promise.reject(new UnauthorizedError(notAuthorized));
       }
       Article.findByIdAndRemove(req.params.articleId)
-        .then(() => res.send(articleRemoved))
+        .then(() => res.send({ message: articleRemoved }))
         .catch(next);
     })
     .catch(next);
