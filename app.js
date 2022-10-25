@@ -15,6 +15,8 @@ const indexRouter = require('./routes/index');
 // Config
 const config = require('./config');
 
+require('dotenv').config();
+
 const app = express();
 const {
   PORT = 3000,
@@ -23,7 +25,6 @@ const {
 } = process.env;
 
 mongoose.connect(MONGO_URL);
-require('dotenv').config();
 
 app.use(helmet());
 app.use(rateLimiter);
