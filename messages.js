@@ -1,5 +1,5 @@
 // Success messages
-module.exports.articleRemoved = 'Article removed successfully'
+module.exports.articleRemoved = 'Article removed successfully';
 
 // Error messages
 module.exports.notAuthorized = 'You are not authorized for that';

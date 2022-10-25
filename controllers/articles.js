@@ -43,11 +43,8 @@ module.exports.deleteArticle = (req, res, next) => {
         return Promise.reject(new NotFoundError(articleNotFound));
       }
       if(article.owner.toString() !== req.user._id) {
-        console.log(article.owner);
-        console.log(req.user._id);
         return Promise.reject(new UnauthorizedError(notAuthorized));
       }
-      console.log(article);
       Article.findByIdAndRemove(req.params.articleId)
         .then(() => res.send(articleRemoved))
         .catch(next);
