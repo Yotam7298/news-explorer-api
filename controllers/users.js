@@ -1,7 +1,17 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { NoAuthorizationError, NotFoundError, ConflictError } = require('../errors/errors');
+const config = require('../config');
+const {
+  NoAuthorizationError,
+  NotFoundError,
+  ConflictError,
+} = require('../errors/errors');
+const {
+  userAlreadyExists,
+  incorrectCredentials,
+  userNotFound,
+} = require('../messages');
 
 module.exports.signUp = (req, res, next) => {
   const { email, password, name } = req.body;
@@ -9,7 +19,7 @@ module.exports.signUp = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if(user) {
-        return Promise.reject(new ConflictError('There is already a user with that email'));
+        return Promise.reject(new ConflictError(userAlreadyExists));
       }
     })
     .then(() => bcrypt.hash(password, 10))
@@ -24,12 +34,12 @@ module.exports.signIn = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if(!user) {
-        return Promise.reject(new NoAuthorizationError('Incorrect password or email'));
+        return Promise.reject(new NoAuthorizationError(incorrectCredentials));
       }
       bcrypt.compare(password, user.password)
         .then((match) => {
           if(!match) {
-            return Promise.reject(new NoAuthorizationError('Incorrect password or email'));
+            return Promise.reject(new NoAuthorizationError(incorrectCredentials));
           }
 
           const { NODE_ENV, JWT_SECRET } = process.env;
@@ -37,7 +47,7 @@ module.exports.signIn = (req, res, next) => {
             { _id: user._id.toString() },
             NODE_ENV === 'production'
               ? JWT_SECRET
-              : 'secret-key',
+              : config.jwtKey,
             { expiresIn: '7d' },
           );
           res.send({ token });
@@ -51,7 +61,7 @@ module.exports.getMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if(!user) {
-        return Promise.reject(new NotFoundError('Requested user could not be found'));
+        return Promise.reject(new NotFoundError(userNotFound));
       }
       res.send(user);
     })

@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
+const config = require('../config');
 const { NoAuthorizationError } = require('../errors/errors');
+const { authNotProvided, notAutorized } = require('../messages');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if(!authorization || !authorization.startsWith('Bearer ')) {
-    throw new NoAuthorizationError('Authorization not provided or provided without bearer');
+    throw new NoAuthorizationError(authNotProvided);
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -18,10 +20,10 @@ module.exports = (req, res, next) => {
       token,
       NODE_ENV === 'production'
         ? JWT_SECRET
-        : 'secret-key',
+        : config.jwtKey,
     );
   } catch (err) {
-    throw new NoAuthorizationError('Authorization required');
+    throw new NoAuthorizationError(notAutorized);
   }
 
   req.user = payload;

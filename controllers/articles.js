@@ -1,5 +1,6 @@
 const Article = require('../models/article');
 const { NotFoundError, UnauthorizedError } = require('../errors/errors');
+const { articleNotFound, notAuthorized, articleRemoved } = require('../messages');
 
 module.exports.getArticles = (req, res, next) => {
   const owner = req.user._id;
@@ -36,16 +37,19 @@ module.exports.addArticle = (req, res, next) => {
 };
 
 module.exports.deleteArticle = (req, res, next) => {
-  Article.findById(req.params.articleId)
+  Article.findById(req.params.articleId).select('+owner')
     .then((article) => {
       if(!article) {
-        return Promise.reject(new NotFoundError('Requested article could not be found'));
+        return Promise.reject(new NotFoundError(articleNotFound));
       }
       if(article.owner.toString() !== req.user._id) {
-        return Promise.reject(new UnauthorizedError('You are not authorized to do that'));
+        console.log(article.owner);
+        console.log(req.user._id);
+        return Promise.reject(new UnauthorizedError(notAuthorized));
       }
-      Article.findByIdAndDelete(req.params.articleId)
-        .then(() => res.send('Article removed successfully'))
+      console.log(article);
+      Article.findByIdAndRemove(req.params.articleId)
+        .then(() => res.send(articleRemoved))
         .catch(next);
     })
     .catch(next);

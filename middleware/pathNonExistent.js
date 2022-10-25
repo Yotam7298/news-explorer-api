@@ -1,5 +1,6 @@
 const { NotFoundError } = require('../errors/errors');
+const { pageNotFound } = require('../messages');
 
 module.exports = () => {
-  throw new NotFoundError('Requested page could not be found');
+  throw new NotFoundError(pageNotFound);
 };
